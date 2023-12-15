@@ -5,7 +5,7 @@ const DBConnection = require("./db/dbConnection")
 
 
 
-app.use(".user", router)
+app.use("/user", router)
 
 app.listen(8000, () => {
     console.log(`server is running at port no. ${8000}`);

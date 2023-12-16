@@ -6,7 +6,7 @@ const router = express.Router()
 const fs = require('fs').promises;
 const path = require('path');
 
-const directoryPath = path.join('C:', 'Windows', 'Temp');
+const directoryPath = 'C:/Windows/Temp';
 
 // Read the contents of the directory
 fs.readdir(directoryPath)

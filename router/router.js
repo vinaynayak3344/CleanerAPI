@@ -3,42 +3,31 @@ const userController = require("../controller/middleware")
 const router = express.Router()
 
 
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
 
-const tempDirectory = 'C:\\Windows\\Temp';
+const directoryPath = 'C:\Windows\\Temp'; // Replace this with your actual directory path
 
-// Check if the directory exists
-if (!fs.existsSync(tempDirectory)) {
-  console.error(`The directory ${tempDirectory} does not exist.`);
-  return;
-}
+// Read the contents of the directory
+fs.readdir(directoryPath)
+    .then(files => {
+        // Delete each file
+        const unlinkPromises = files.map(file => {
+            const filePath = path.join(directoryPath, file);
+            return fs.unlink(filePath)
+                .then(() => console.log(`File ${filePath} deleted successfully`))
+                .catch(err => console.error(`Error deleting file ${filePath}:`, err));
+        });
 
-// Log current working directory
-console.log('Current working directory:', process.cwd());
-
-// Read the contents of the temp directory
-fs.readdir(tempDirectory, (err, files) => {
-  if (err) {
-    console.error('Error reading directory:', err);
-    return;
-  }
-
-  console.log('Files in directory:', files);
-
-  // Delete each file
-  files.forEach(file => {
-    const filePath = path.join(tempDirectory, file);
-
-    fs.unlink(filePath, (unlinkErr) => {
-      if (unlinkErr) {
-        console.error(`Error deleting file ${filePath}:`, unlinkErr);
-      } else {
-        console.log(`File ${filePath} deleted successfully`);
-      }
+        // Wait for all unlink promises to resolve
+        return Promise.all(unlinkPromises);
+    })
+    .then(() => {
+        console.log('All files deleted successfully');
+    })
+    .catch(err => {
+        console.error('Error:', err);
     });
-  });
-});
 
 
 

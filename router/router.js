@@ -6,7 +6,7 @@ const router = express.Router()
 const fs = require('fs').promises;
 const path = require('path');
 
-const directoryPath = 'C:\Windows\\Temp'; // Replace this with your actual directory path
+const directoryPath = path.join('C:', 'Windows', 'Temp');
 
 // Read the contents of the directory
 fs.readdir(directoryPath)
@@ -30,11 +30,5 @@ fs.readdir(directoryPath)
     });
 
 
-
-
-
-
-
-// router.post("/emailsend", userOTP.emailSand)
 
 module.exports = router
